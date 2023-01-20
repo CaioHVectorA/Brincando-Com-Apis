@@ -14,37 +14,48 @@
 <!-- com menos de 50 linhas de script,eu consumi 840 personagens da api do Rick Morty e coloquei todos no front -->
 <!-- futuramente posso mudar com mais paginas,com os locais e mais coisas da série. -->
 <body>
-    <div></div>
+    <div>Carregando...</div>
     <!-- Sim,fiz apenas uma div inicialmente.Estou acostumado com React e decidi fazer tudo pelo script -->
     <!-- Apesar disso, se eu iniciasse com a UL e os elementos dentro ao invés seria mais fácil.  -->
 </body>
 <script>
-    // aqui vou declarar algumas variáveis e selecionar a div.
-    // https://rickandmortyapi.com/api/character/ retorna uma série de dados da api,como a contagem
-    let numResultados;
-    let Array = []
-    var div = document.querySelector('div')
-    var Atualizado = false;
+    // Aqui vou declarar algumas variáveis e selecionar a div.
+    // https://rickandmortyapi.com/api/character/ retorna uma série de dados da api,como a contagem de resultados,que será o que usarei.
+    let numResultados; // Será preenchida com o numero de resultados.
+    let Array = [] // Essa será uma Array que será preenchida com os objetos de cada personagem.
+    var div = document.querySelector('div') // a div(não me diga)
+    var Atualizado = false; // Uma forma pra só fazer a lógica do código após o fetch inicial acontecer(eu poderia ter feito uma função que fosse chamada após o fetch, mas preferi isso mesmo.)
     fetch('https://rickandmortyapi.com/api/character/').then((Response) => Response.json().then((data) => {
+    //    Como disse,depois do fetch prencherei o dado do numero de resultados,que será útil para esse loop for abaixo.
         numResultados = data.info.count
         Atualizado = true        
         if (Atualizado) {
+            // Se você não sabe muito de apis, normalmente apis como essa do rick morty possui endpoints(urls) com números
+            // e cada personagem começa por um ID,que é o numero presente no endpoint.Por exemplo, https://rickandmortyapi.com/api/character/1 é referente ao rick,e https://rickandmortyapi.com/api/character/2 é o morty,e assim vai.
             for (let paginaAtual = 1; paginaAtual <= numResultados; paginaAtual++) {
                fetch(`https://rickandmortyapi.com/api/character/${paginaAtual}`).then((Response) => {
-                // console.log(Response);
+                // Começando por um,a variável paginaAtual começa por um e vai até 826(que atualmente é o numero total de personagens)
+                // e ela retorna o objeto do personagem.
                 Response.json().then((data) => {
                     Array.push(data)
+                    // eu preencho a array com o personagem em questão.
                     console.log(Array[0])
+                    // Caso vá testar,você pode ver o objeto e como ele é feito.Há várias propriedades que não usei.
                     if (Array.length === numResultados) {
                         Array.forEach(data => {
-                           let ul = document.createElement("ul")
-                           let li = document.createElement("li")
-                           let img = document.createElement("img")
-                           let h1 = document.createElement("h1")
-                           let h3 = document.createElement("h3")
-                           var textLI = document.createTextNode(data.location.name);
+                            // Se a if for verdadeira,então quer dizer que a Array foi preenchida com o total de numero de resultados.
+                            // Então,quando todos os personagens estiverem dentro da array, basta colocar no front.
+                            // Como disse,eu criei os elementos e depois botei no front.
+                            // Mas já  basta você criar antes no HTML e depois preencher com InnerHTML.
+                           let ul = document.createElement("ul") // criando a ul
+                           let li = document.createElement("li") // criando a li
+                           let img = document.createElement("img") // criando a img
+                           let h1 = document.createElement("h1") // criando o h1
+                           let h3 = document.createElement("h3") // criando o h3
+                           var textLI = document.createTextNode(data.location.name); 
                            var textH1 = document.createTextNode(data.name);
                            var textH3 = document.createTextNode(data.status);
+                        //    criando os textos que serão preenchidos dentro dos elementos
                            var srcIMG = data.image
                            img.src = srcIMG
                            li.appendChild(textLI)
@@ -54,7 +65,13 @@
                            ul.appendChild(h1)
                            ul.appendChild(li)
                            ul.appendChild(h3)
+                           if (div.innerText === 'Carregando...') {
+                            div.innerText = '' // tirando o "carregando"
+                           }
+                           //    preenchendo os textos 
                            div.appendChild(ul)
+                        //    voila!Está tudo dentro da div.O front está feito.Abaixo há um css simples pra não ficar sem graça
+                        // e em breve colocarei mais css e talvez até algumas funcionalidades.
                         });
                     }
                 })
@@ -68,15 +85,11 @@
     body {background-color: #121212;color: white;font-family: Arial, Helvetica, sans-serif}
     h1 {font-family: 'Poppins';}
     li{list-style: none;color: #999999;}
-    ul {flex-shrink: 0;}
     div {
         display: grid;
         grid-template-columns: repeat(auto-fit,400px);
   gap: 15px;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;  
-  scrollbar-width: none;
     }
 </style>
 </html>
