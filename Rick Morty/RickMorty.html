@@ -9,27 +9,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<!-- Esse arquivo demonstra uma forma de simples(não perfeita,porém simples) de como consumir api e colocar no front -->
+<!-- por querer começar com coisas simples,fiz só um arquivo HTML mesmo,mas nem sempre vai ser bom. -->
+<!-- com menos de 50 linhas de script,eu consumi 840 personagens da api do Rick Morty e coloquei todos no front -->
+<!-- futuramente posso mudar com mais paginas,com os locais e mais coisas da série. -->
 <body>
     <div></div>
+    <!-- Sim,fiz apenas uma div inicialmente.Estou acostumado com React e decidi fazer tudo pelo script -->
+    <!-- Apesar disso, se eu iniciasse com a UL e os elementos dentro ao invés seria mais fácil.  -->
 </body>
 <script>
+    // aqui vou declarar algumas variáveis e selecionar a div.
+    // https://rickandmortyapi.com/api/character/ retorna uma série de dados da api,como a contagem
     let numResultados;
-    let paginas;
     let Array = []
     var div = document.querySelector('div')
     var Atualizado = false;
     fetch('https://rickandmortyapi.com/api/character/').then((Response) => Response.json().then((data) => {
         numResultados = data.info.count
-        paginas = 826
         Atualizado = true        
         if (Atualizado) {
-            for (let paginaAtual = 1; paginaAtual <= paginas; paginaAtual++) {
+            for (let paginaAtual = 1; paginaAtual <= numResultados; paginaAtual++) {
                fetch(`https://rickandmortyapi.com/api/character/${paginaAtual}`).then((Response) => {
                 // console.log(Response);
                 Response.json().then((data) => {
                     Array.push(data)
                     console.log(Array[0])
-                    if (Array.length === paginas) {
+                    if (Array.length === numResultados) {
                         Array.forEach(data => {
                            let ul = document.createElement("ul")
                            let li = document.createElement("li")
