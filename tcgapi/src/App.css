@@ -1,0 +1,13 @@
+body {
+    background-color: #121212;
+    font-family: Poppins;
+    display: flex;
+    color: #ffffff;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+button {
+    background-color: #44FFD2;
+}
