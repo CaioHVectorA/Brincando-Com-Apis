@@ -66,12 +66,14 @@ function App() {
     }))
   },[])
   useEffect(() => {
+    console.log(Array)
     if (Array.length !== 4945) {
       fetch('https://api.tcgdex.net/v2/pt/cards/').then((Response) => Response.json().then((data) => {
         data.forEach(element => {
             if (element.image) {
               Temp.push(element)
               setArray(Temp)
+                console.log(Array.length,'foi')
             }
           });
         }))
@@ -81,15 +83,12 @@ function App() {
   const ArrayFiltrada = Array.filter(item => item.name.toUpperCase().startsWith(inputValue.toUpperCase()))
   setBusca(ArrayFiltrada)
 }
-useEffect(() => {
-  console.log(Busca)
-},[Busca])
   return (
     <div className="App">
       {!Filtro &&  !Busca && <div>
       <h1>Bem vindo ao Centro TCG!</h1>
       <p>Todas as suas informações sobre as cartas aqui.</p>
-      <h2>O que deseja?</h2>
+      <h2>Busce por uma carta</h2>
       <div style={{display: 'grid'}}>
         <Search value={inputValue} onChange={(e) => {setIV(e.target.value)}} placeholder='Pikachu'>
         </Search>
@@ -108,21 +107,27 @@ useEffect(() => {
       {Busca && <ButtonN onClick={() => {setBusca(null)}}>Voltar a página inicial</ButtonN>}
      {Array.length === 4945 && Filtro === 'All' && <div>
       <h2>Mostrando todas as {Array.length} Cartas.</h2>
-      <ButtonN onClick={() => setFiltro(null)}>Voltar ao normal</ButtonN>
+      <p>As imagens podem demorar para carregar.</p>
+      <ButtonN onClick={() => setFiltro(null)}>Voltar ao início</ButtonN>
+      <div style={{display: 'grid',gridTemplateColumns: 'repeat(auto-fit,300px)',gap: '12px',width: '100vw',margin: '0 auto',justifyContent: 'center'}}>
       {Array.map(item => (
-        <div key={item.id}>
+        <div key={item.id + item.name + item.localid}>
         <h1 style={{fontFamily: 'Arial'}}>{item.name}</h1>
         <img alt='CARREGANDO-IMAGEM' style={{height: '400px',width: '280px',backgroundColor: '#161616',borderRadius: '20px'}} src={`${item.image}/low.png`} />
         </div>
       ))}
+      </div>
       </div>}
       {Busca && <div>
+      <p>As imagens podem demorar para carregar.</p>
+      <div style={{display: 'grid',gridTemplateColumns: 'repeat(auto-fit,300px)',gap: '12px',width: '100vw',margin: '0 auto',justifyContent: 'center'}}>
         {Busca.map(item => (
                   <div key={item.id + item.name + item.localid}>
                   <h1 style={{fontFamily: 'Arial'}}>{item.name}</h1>
                   <img alt='CARREGANDO-IMAGEM' style={{height: '400px',width: '280px',backgroundColor: '#d9d9d9'}} src={`${item.image}/low.png`} />
                   </div>
         ))}
+        </div>
         </div>}
         {Busca !== null && Busca.length === 0 && <h1>Nenhuma carta foi encontrada.Use palavras chave mais específicas!</h1>}
       {Array.length !== 4945 && Filtro === 'All' && <h1>Carregando...</h1>}
